@@ -20,7 +20,7 @@ This is already better than a lot we find in the command line world, but still, 
 
 ```bash
 #for the status
-hey status -sg someServerGroup -sn some-service-name 
+hey status -sg someServerGroup -sn some-service-name
 
 # for restarting the service
 hey restart -sg someServerGroup -sn some-service-name
@@ -40,7 +40,7 @@ Currently the code is in a very initial, prototype, not really working state. Th
    ```
 
 3. Install Scala native compilation OS packages (tested with Ubuntu): `sudo apt install clang libgc-dev libunwind-dev`
-4. We could have an Ansible playbook in the future to install all dependencies but for now, besides the other packages, manual build/install is required for this one: https://github.com/google/re2/wiki/Install
+4. We could have an Ansible playbook in the future to install all dependencies but for now, besides the other packages, manual build/install is required for this one: <https://github.com/google/re2/wiki/Install>
 5. `sbt nativeLink`
 6. You can use the natively compiled `hey` tool by calling `target/scala-2.11/hey-out`
 
