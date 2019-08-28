@@ -59,17 +59,17 @@ ln -s target/scala-2.11/hey-out ~/bin/hey
 ```
 
 ```text
-hey        
+hey                       
 Error: at least one of the supported commands should have been called
 hey 0.1
 Usage: hey [echo|ansible] [options] <args>...
 
-Command: echo <value>
-Prints the value from the process itself and again from OS echo command for process execution test purposes
-  <value>
   --version                Prints version information
   -vb, --verbosity <value>
                            defaults to full. any other value means silent
+Command: echo <value>
+Prints the value from the process itself and again from OS echo command for process execution test purposes
+  <value>
 Command: ansible [status|restart|stop] [options]
 ansible related commands
   -sg, --serverGroup <value>
@@ -82,6 +82,7 @@ Command: ansible restart
 (Re)starts those servers
 Command: ansible stop
 Stops those servers
+You can define default values for command options at the hocon file ~/.hey/hey.conf
 ```
 
 ## Roadmap
@@ -108,6 +109,7 @@ Stops those servers
 
 ## License
 
+```license
 MIT License
 
 Copyright (c) 2019 Oswaldo C. Dantas Jr
@@ -129,3 +131,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+```

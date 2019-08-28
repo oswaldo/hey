@@ -6,16 +6,21 @@
 
 import java.io.{InputStream, OutputStream}
 
+import org.ekrich.config.ConfigFactory
 import scopt.OptionParser
 
 object Main {
+
+  private val settingsPath = s"${IOUtil.homePath}/.hey/hey.conf"
+  private val settings =
+    Settings.read(settingsPath).getOrElse(new Settings())
 
   private case class HeyCommandConfig(
       echo: String = "",
       verbosity: String = "full",
       commandScope: String = "",
-      serverGroup: String = "",
-      serviceName: String = "",
+      serverGroup: String = settings.defaultServerGroup,
+      serviceName: String = settings.defaultServiceName,
       statusCommand: Boolean = false,
       restartCommand: Boolean = false,
       stopCommand: Boolean = false,
@@ -53,14 +58,14 @@ object Main {
       .text("ansible related commands")
       .children(
         opt[String]("serverGroup")
-          .required()
           .abbr("sg")
           .action((x, c) => c.copy(serverGroup = x))
+          .withFallback(() => settings.defaultServerGroup)
           .text(s"which servers should I send a command to"),
         opt[String]("serviceName")
-          .required()
           .abbr("sn")
           .action((x, c) => c.copy(serviceName = x))
+          .withFallback(() => settings.defaultServiceName)
           .text(s"which service should respond to the command"),
         cmd("status")
           .abbr("st")
@@ -82,11 +87,19 @@ object Main {
               failure(
                 "at least one of the supported commands should have been called"
               )
+            } else if (c.commandScope == "ansible" && (c.serverGroup.isEmpty || c.serviceName.isEmpty)) {
+              failure(
+                s"for ansible commands, serverGroup and serviceName must be defined, through command line options on in the conf file in $settingsPath"
+              )
             } else {
               success
             }
         )
       )
+
+    note(
+      s"You can define default values for command options at the hocon file $settingsPath"
+    )
 
   }
 
@@ -127,6 +140,9 @@ object Main {
     }
   }
 
+  def contextMessage(c: HeyCommandConfig) =
+    s"serverGroup: ${c.serverGroup}, serviceName: ${c.serviceName}"
+
   def main(args: Array[String]): Unit =
     parser.parse(args, HeyCommandConfig()) match {
       case Some(c) =>
@@ -140,39 +156,39 @@ object Main {
         if (c.statusCommand) {
           execute(
             c,
-            "Requesting service status",
+            s"Requesting service status (${contextMessage(c)})",
             "ansible",
             c.serverGroup,
             "-a",
-            s"""systemctl status ${c.serviceName}.service""",
+            s"systemctl status ${c.serviceName}.service",
             "-v"
           )
         }
         if (c.restartCommand) {
           execute(
             c,
-            "Requesting service restart",
+            s"Requesting service restart (${contextMessage(c)})",
             "ansible",
             c.serverGroup,
             "-b",
             "-m",
             "service",
             "-a",
-            s"""name=${c.serviceName} state=restarted""",
+            s"name=${c.serviceName} state=restarted",
             "-v"
           )
         }
         if (c.stopCommand) {
           execute(
             c,
-            "Requesting service restart",
+            s"Requesting service stop (${contextMessage(c)})",
             "ansible",
             c.serverGroup,
             "-b",
             "-m",
             "service",
             "-a",
-            s"""name=${c.serviceName} state=stopped""",
+            s"name=${c.serviceName} state=stopped",
             "-v"
           )
         }
