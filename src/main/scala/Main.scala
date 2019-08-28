@@ -27,16 +27,6 @@ object Main {
   private val parser = new OptionParser[HeyCommandConfig]("hey") {
     head("hey", "0.1")
 
-    cmd("echo")
-      .text(
-        s"Prints the value from the process itself and again from OS echo command for process execution test purposes"
-      )
-      .children(
-        arg[String]("<value>")
-          .required()
-          .action((x, c) => c.copy(echo = x))
-      )
-
     opt[Unit]("version")
       .text(s"Prints version information")
       .action((_, c) => c.copy(printVersion = true))
@@ -47,6 +37,16 @@ object Main {
       .action((x, c) => c.copy(verbosity = x))
       .optional()
       .text(s"defaults to full. any other value means silent")
+
+    cmd("echo")
+      .text(
+        s"Prints the value from the process itself and again from OS echo command for process execution test purposes"
+      )
+      .children(
+        arg[String]("<value>")
+          .required()
+          .action((x, c) => c.copy(echo = x))
+      )
 
     cmd("ansible")
       .action((_, c) => c.copy(commandScope = "ansible"))

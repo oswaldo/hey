@@ -59,20 +59,52 @@ ln -s target/scala-2.11/hey-out ~/bin/hey
 ```
 
 ```text
-  hey
-   Error: at least one of the supported commands should have been called
-   hey 0.1
-   Usage: hey [status|restart|stop] [options]
+hey        
+Error: at least one of the supported commands should have been called
+hey 0.1
+Usage: hey [echo|ansible] [options] <args>...
 
-     -sg, --serverGroup <value>
-                              which servers should I send a command to
-   Command: status
-   Returns the systemd status from those servers
-   Command: restart
-   (Re)starts those servers
-   Command: stop
-   Stops those servers
+Command: echo <value>
+Prints the value from the process itself and again from OS echo command for process execution test purposes
+  <value>
+  --version                Prints version information
+  -vb, --verbosity <value>
+                           defaults to full. any other value means silent
+Command: ansible [status|restart|stop] [options]
+ansible related commands
+  -sg, --serverGroup <value>
+                           which servers should I send a command to
+  -sn, --serviceName <value>
+                           which service should respond to the command
+Command: ansible status
+Returns the systemd status from those servers
+Command: ansible restart
+(Re)starts those servers
+Command: ansible stop
+Stops those servers
 ```
+
+## Roadmap
+
+### Short term
+
+* Useful aliases for git and sbt
+* Commands to easy the tool extension
+* Config file for default option and argument values
+* "Summary verbosity"
+* Usage examples
+
+### Middle term
+
+* Installers
+* Useful aliases for apt, zip, tar, ssh, cron and other common server tools
+* Modularization, so new commands and aliases are realized in external libraries
+* Automation for configuring dependencies
+
+### Long term
+
+* Command dependency management and composition
+* Assistant like behaviour (`hey bob rebuild then redeploy then check and loadTest tomorrow`)
 
 ## License
 
