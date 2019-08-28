@@ -88,7 +88,7 @@ Stops those servers
 
 ### Short term
 
-* Useful aliases for git and sbt
+* Useful aliases for git, sbt and docker
 * Commands to easy the tool extension
 * Config file for default option and argument values
 * "Summary verbosity"
@@ -97,7 +97,7 @@ Stops those servers
 ### Middle term
 
 * Installers
-* Useful aliases for apt, zip, tar, ssh, cron and other common server tools
+* Useful aliases for npm, maven, apt, zip, tar, ssh, cron and other common server and developer tools
 * Modularization, so new commands and aliases are realized in external libraries
 * Automation for configuring dependencies
 

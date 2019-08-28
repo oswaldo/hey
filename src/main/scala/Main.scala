@@ -111,22 +111,11 @@ object Main {
     //region using java classes because scala process handling need threads and that is not yet supported by scala-native
     try {
       val process =
-        Runtime.getRuntime.exec(commandAndArguments.toArray)
-
-      def forward(in: InputStream, out: OutputStream): Unit = {
-        val bufferSize = 1024
-        val buffer = new Array[Byte](bufferSize)
-        var read = 0
-        while ({
-          read = in.read(buffer)
-          read != -1
-        }) out.write(buffer, 0, read)
-      }
-      forward(process.getInputStream, System.out)
-      forward(process.getErrorStream, System.err)
+        new ProcessBuilder().inheritIO.command(commandAndArguments: _*).start()
+      Runtime.getRuntime.exec(commandAndArguments.toArray)
       process.waitFor()
       printIfSome(
-        s"Process ended. Alive: ${process.isAlive}. Exit value: ${process.exitValue()}",
+        s"Process ended. Exit value: ${process.exitValue()}",
         error = process.exitValue() != 0
       )
       //endregion
