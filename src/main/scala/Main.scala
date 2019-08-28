@@ -10,15 +10,17 @@ import scopt.OptionParser
 
 object Main {
 
-  private case class HeyCommandConfig(echo: String = "",
-                                      verbosity: String = "full",
-                                      commandScope: String = "",
-                                      serverGroup: String = "",
-                                      serviceName: String = "",
-                                      statusCommand: Boolean = false,
-                                      restartCommand: Boolean = false,
-                                      stopCommand: Boolean = false,
-                                      printVersion: Boolean = false) {
+  private case class HeyCommandConfig(
+      echo: String = "",
+      verbosity: String = "full",
+      commandScope: String = "",
+      serverGroup: String = "",
+      serviceName: String = "",
+      statusCommand: Boolean = false,
+      restartCommand: Boolean = false,
+      stopCommand: Boolean = false,
+      printVersion: Boolean = false
+  ) {
     val fullVerbosity = verbosity == "full"
   }
 
@@ -82,16 +84,18 @@ object Main {
               )
             } else {
               success
-          }
+            }
         )
       )
 
   }
 
-  def execute(c: HeyCommandConfig,
-              description: String,
-              command: String,
-              arguments: String*): Unit = {
+  def execute(
+      c: HeyCommandConfig,
+      description: String,
+      command: String,
+      arguments: String*
+  ): Unit = {
 
     def printIfSome(s: String, error: Boolean = false): Unit =
       if (c.fullVerbosity && !s.isEmpty) {
@@ -159,14 +163,28 @@ object Main {
           execute(
             c,
             "Requesting service restart",
-            s"""ansible ${c.serverGroup} -b -m service -a "name=${c.serviceName} state=restarted""""
+            "ansible",
+            c.serverGroup,
+            "-b",
+            "-m",
+            "service",
+            "-a",
+            s"""name=${c.serviceName} state=restarted""",
+            "-v"
           )
         }
         if (c.stopCommand) {
           execute(
             c,
             "Requesting service restart",
-            s"""ansible ${c.serverGroup} -b -m service -a "name=${c.serviceName} state=stopped""""
+            "ansible",
+            c.serverGroup,
+            "-b",
+            "-m",
+            "service",
+            "-a",
+            s"""name=${c.serviceName} state=stopped""",
+            "-v"
           )
         }
 
