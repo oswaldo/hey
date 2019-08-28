@@ -54,7 +54,7 @@ cd
 mkdir ~/bin
 source .profile
 #then link the thing
-ln target/scala-2.11/hey-out ~/bin/hey
+ln -s target/scala-2.11/hey-out ~/bin/hey
 #then `cd` into wherever you want and...
 ```
 
