@@ -8,6 +8,7 @@ nativeLinkStubs := true
 enablePlugins(ScalaNativePlugin)
 
 libraryDependencies += "com.github.scopt" %%% "scopt" % "4.0.0-RC2"
+libraryDependencies += "org.ekrich" %%% "sconfig" % "1.0.0"
 
 git.useGitDescribe := true
 organizationName := "Oswaldo C. Dantas Jr"
