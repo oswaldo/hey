@@ -24,7 +24,9 @@ object Main {
       statusCommand: Boolean = false,
       restartCommand: Boolean = false,
       stopCommand: Boolean = false,
-      printVersion: Boolean = false
+      printVersion: Boolean = false,
+      containerBash: Boolean = false,
+      containerName: String = settings.defaultContainerName
   ) {
     val fullVerbosity = verbosity == "full"
   }
@@ -83,7 +85,7 @@ object Main {
               failure(
                 "restart and stop command should not be used simultaneously"
               )
-            } else if (!(!c.echo.isEmpty || c.printVersion || c.statusCommand || c.restartCommand || c.stopCommand)) {
+            } else if (!(!c.echo.isEmpty || c.printVersion || c.statusCommand || c.restartCommand || c.stopCommand || c.containerBash)) {
               failure(
                 "at least one of the supported commands should have been called"
               )
@@ -100,6 +102,20 @@ object Main {
     note(
       s"You can define default values for command options at the hocon file $settingsPath"
     )
+
+    cmd("docker")
+      .action((_, c) => c.copy(commandScope = "docker"))
+      .text("docker related commands")
+      .children(
+        opt[String]("containerName")
+          .abbr("cn")
+          .action((x, c) => c.copy(serverGroup = x))
+          .withFallback(() => settings.defaultContainerName)
+          .text(s"which container should I execute at"),
+        cmd("bash")
+          .action((_, c) => c.copy(containerBash = true))
+          .text(s"Runs bash on the defined containerName")
+      )
 
   }
 
@@ -190,6 +206,18 @@ object Main {
             "-a",
             s"name=${c.serviceName} state=stopped",
             "-v"
+          )
+        }
+
+        if (c.containerBash) {
+          execute(
+            c,
+            s"Bashing into container (${contextMessage(c)})",
+            "docker",
+            "exec",
+            "-it",
+            c.containerName,
+            "bash"
           )
         }
 
