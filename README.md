@@ -59,10 +59,10 @@ ln -s target/scala-2.11/hey-out ~/bin/hey
 ```
 
 ```text
-hey                       
+hey            
 Error: at least one of the supported commands should have been called
 hey 0.1
-Usage: hey [echo|ansible] [options] <args>...
+Usage: hey [echo|ansible|docker] [options] <args>...
 
   --version                Prints version information
   -vb, --verbosity <value>
@@ -82,7 +82,13 @@ Command: ansible restart
 (Re)starts those servers
 Command: ansible stop
 Stops those servers
-You can define default values for command options at the hocon file ~/.hey/hey.conf
+You can define default values for command options at the hocon file /home/oswaldo/.hey/hey.conf
+Command: docker [bash] [options]
+docker related commands
+  -cn, --containerName <value>
+                           which container should I execute at
+Command: docker bash
+Runs bash on the defined containerName
 ```
 
 ## Roadmap

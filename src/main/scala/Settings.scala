@@ -50,5 +50,7 @@ class Settings(config: Config = ConfigFactory.empty()) {
     config.getStringOrElse("hey.defaults.serverGroup", "")
   val defaultServiceName =
     config.getStringOrElse("hey.defaults.serviceName", "")
+  val defaultContainerName =
+    config.getStringOrElse("hey.defaults.containerName", "")
 
 }
