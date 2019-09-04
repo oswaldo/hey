@@ -26,7 +26,10 @@ object Main {
       stopCommand: Boolean = false,
       printVersion: Boolean = false,
       containerBash: Boolean = false,
-      containerName: String = settings.defaultContainerName
+      containerName: String = settings.defaultContainerName,
+      debug: Boolean = false,
+      testNameEnding: String = "",
+      purge: Boolean = false
   ) {
     val fullVerbosity = verbosity == "full"
   }
@@ -70,7 +73,6 @@ object Main {
           .withFallback(() => settings.defaultServiceName)
           .text(s"which service should respond to the command"),
         cmd("status")
-          .abbr("st")
           .action((_, c) => c.copy(statusCommand = true))
           .text(s"Returns the systemd status from those servers"),
         cmd("restart")
@@ -85,7 +87,7 @@ object Main {
               failure(
                 "restart and stop command should not be used simultaneously"
               )
-            } else if (!(!c.echo.isEmpty || c.printVersion || c.statusCommand || c.restartCommand || c.stopCommand || c.containerBash)) {
+            } else if (!(!c.echo.isEmpty || c.printVersion || c.statusCommand || c.restartCommand || c.stopCommand || c.containerBash || c.commandScope == "sbt")) {
               failure(
                 "at least one of the supported commands should have been called"
               )
@@ -117,13 +119,73 @@ object Main {
           .text(s"Runs bash on the defined containerName")
       )
 
+    cmd("sbt")
+      .action((_, c) => c.copy(commandScope = "sbt"))
+      .text("sbt related commands")
+      .children(
+        opt[Unit]("debug")
+          .abbr("d")
+          .action((_, c) => c.copy(debug = true))
+          .optional()
+          .text(s"if the process should be started in debug mode"),
+        opt[Unit]("purge")
+          .abbr("p")
+          .action((_, c) => c.copy(purge = true))
+          .optional()
+          .text(s"if target folders should be removed"),
+        cmd("testOnly")
+          .text(
+            s"Runs sbt in test only mode for the tests matching the argument"
+          )
+          .children(
+            arg[String]("<testNameEnding>")
+              .text(
+                "This avoids having to use the FQCN, prepending an * to the call"
+              )
+              .required()
+              .action((x, c) => c.copy(testNameEnding = x))
+          )
+      )
+
   }
+
+  def confirm[T](
+      f: => T,
+      message: String = "Are you sure you want to continue?"
+  ): Option[T] = {
+    println(s"$message [y|n]")
+    var k = -1
+    var printHelp = true
+    while (k != 'y' && k != 'n') {
+      if (k != -1 && printHelp) {
+        println(
+          "Enter y if you want to execute the action, otherwise, n to abort"
+        )
+        printHelp = false
+      }
+      k = Console.in.read()
+    }
+    k match {
+      case 'y' => Option(f)
+      case 'n' => None
+    }
+  }
+
+  def eval(c: HeyCommandConfig, description: String, script: String): Unit =
+    execute(c, description, "sh" :: "-c" :: script :: Nil)
 
   def execute(
       c: HeyCommandConfig,
       description: String,
       command: String,
       arguments: String*
+  ): Unit =
+    execute(c, description, command :: arguments.toList)
+
+  def execute(
+      c: HeyCommandConfig,
+      description: String,
+      commandAndArguments: List[String]
   ): Unit = {
 
     def printIfSome(s: String, error: Boolean = false): Unit =
@@ -132,7 +194,6 @@ object Main {
       }
 
     printIfSome(description)
-    val commandAndArguments = command :: arguments.toList
     printIfSome(s"Will execute the following command: ${commandAndArguments
       .map(arg => if (arg.contains(" ")) s""""$arg"""" else arg)
       .mkString(" ")}")
@@ -159,7 +220,7 @@ object Main {
   def contextMessage(c: HeyCommandConfig) =
     s"serverGroup: ${c.serverGroup}, serviceName: ${c.serviceName}"
 
-  def main(args: Array[String]): Unit =
+  def main(args: Array[String]): Unit = {
     parser.parse(args, HeyCommandConfig()) match {
       case Some(c) =>
         println(c.echo)
@@ -221,7 +282,32 @@ object Main {
           )
         }
 
+        if (c.purge) {
+          confirm(
+            eval(
+              c,
+              "Purging sbt target folders",
+              "rm -rf target; rm -rf project/target"
+            ),
+            "This will remove target and project/target folders. Are you sure? (If you requested some other sbt command, it will still be executed)"
+          )
+        }
+
+        if (!c.testNameEnding.isEmpty) {
+          val sbtArgs = (if (c.debug) List("-Ddebug=1") else Nil) ++ List(
+            s"""testOnly *${c.testNameEnding}"""
+          )
+          execute(
+            c,
+            s"Starting sbt test(s) (${contextMessage(c)})",
+            "sbt",
+            sbtArgs: _*
+          )
+        }
+
       case None =>
       //bad arguments. nothing to do
     }
+    sys.exit()
+  }
 }
