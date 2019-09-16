@@ -59,19 +59,15 @@ ln -s target/scala-2.11/hey-out ~/bin/hey
 ```
 
 ```text
-hey       
+hey                                     
 Error: at least one of the supported commands should have been called
 hey 0.1
-Usage: hey [echo|ansible|docker|sbt] [options] <args>...
+Usage: hey [ansible|docker|sbt] [options] <args>...
 
-  --version                Prints version information
   -vb, --verbosity <value>
                            defaults to full. any other value means silent
-Command: echo <value>
-Prints the value from the process itself and again from OS echo command for process execution test purposes
-  <value>
 Command: ansible [status|restart|stop] [options]
-ansible related commands
+Ansible related commands
   -sg, --serverGroup <value>
                            which servers should I send a command to
   -sn, --serviceName <value>
@@ -82,20 +78,21 @@ Command: ansible restart
 (Re)starts those servers
 Command: ansible stop
 Stops those servers
-You can define default values for command options at the hocon file /home/oswaldo/.hey/hey.conf
 Command: docker [bash] [options]
-docker related commands
+Docker related commands
   -cn, --containerName <value>
                            which container should I execute at
 Command: docker bash
 Runs bash on the defined containerName
-Command: sbt [testOnly] [options] <args>...
-sbt related commands
+Command: sbt [purge|test] [options] <suffix>
+Sbt related commands
   -d, --debug              if the process should be started in debug mode
-  -p, --purge              if target folders should be removed
-Command: sbt testOnly <testNameEnding>
-Runs sbt in test only mode for the tests matching the argument
-  <testNameEnding>         This avoids having to use the FQCN, prepending an * to the call
+Command: sbt purge
+Removes target folders
+Command: sbt test
+Runs all sbt tests or the ones matching the given suffix
+  <suffix>                 This avoids having to use the FQCN, prepending an * to the call
+You can define default values for command options at the hocon file /home/oswaldo/.hey/hey.conf
 ```
 
 ## Roadmap

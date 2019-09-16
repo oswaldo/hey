@@ -1,3 +1,11 @@
+/*
+ * Copyright 2019 Oswaldo C. Dantas Jr
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+package hey.util
+
 import java.nio.file.{Files, Path, Paths}
 
 object IOUtil {

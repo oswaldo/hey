@@ -4,10 +4,16 @@
  * SPDX-License-Identifier: MIT
  */
 
+package hey.cli
+
+import hey.util.IOUtil
 import org.ekrich.config.{Config, ConfigFactory}
-import Settings.implicits._
+import hey.cli.Settings.implicits._
+import hey.util.IOUtil.homePath
 
 object Settings {
+
+  val settingsPath = s"$homePath/.hey/hey.conf"
 
   private def readConfig(path: String): Option[Config] =
     IOUtil.readString(path).map(ConfigFactory.parseString)
@@ -27,7 +33,7 @@ object Settings {
       def getStringOrElse(path: String, default: => String): String =
         getOrElse(path, underlying.getString, default)
 
-      private def optional[T](path: String, f: (String) => T): Option[T] =
+      private def optional[T](path: String, f: String => T): Option[T] =
         if (underlying.hasPath(path)) {
           Some(f(path))
         } else {
@@ -36,7 +42,7 @@ object Settings {
 
       private def getOrElse[T](
           path: String,
-          f: (String) => T,
+          f: String => T,
           default: => T
       ): T =
         optional(path, f).getOrElse(default)
@@ -46,11 +52,11 @@ object Settings {
 }
 
 class Settings(config: Config = ConfigFactory.empty()) {
-  val defaultServerGroup =
+  val defaultServerGroup: String =
     config.getStringOrElse("hey.defaults.serverGroup", "")
-  val defaultServiceName =
+  val defaultServiceName: String =
     config.getStringOrElse("hey.defaults.serviceName", "")
-  val defaultContainerName =
+  val defaultContainerName: String =
     config.getStringOrElse("hey.defaults.containerName", "")
 
 }
