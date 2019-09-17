@@ -48,15 +48,15 @@ object ProcessUtil {
 
   def evalArguments(
       c: HeyCommandConfig,
-      script: String
+      script: HeyCommandConfig => String
   ): List[String] =
-    List("sh", "-c", script)
+    List("sh", "-c", script(c))
 
   def eval(
       c: HeyCommandConfig,
       callDescription: String,
       confirmationMessage: Option[String],
-      script: String
+      script: HeyCommandConfig => String
   ): Unit =
     execute(c, callDescription, confirmationMessage, evalArguments(c, script))
 

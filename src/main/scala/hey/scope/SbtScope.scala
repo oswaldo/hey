@@ -32,9 +32,9 @@ class SbtScope(
     commandAction = c => c.copy(command = Purge),
     description = Some("Removes target folders"),
     commandAndArguments =
-      evalArguments(_, "rm -rf target; rm -rf project/target"),
+      evalArguments(_, _ => "rm -rf target; rm -rf project/target"),
     confirmationMessage = Some(
-      "This will remove target and project/target folders. Are you sure? (If you requested some other sbt command, it will still be executed)"
+      "This will remove target and project/target folders. Are you sure?"
     )
   )
 

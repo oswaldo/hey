@@ -12,12 +12,12 @@ import scopt.{OParser, OParserBuilder}
 
 object Main {
 
-  val supportedScopes: List[HeyCommandScope] =
-    List(new AnsibleScope, new DockerScope, new SbtScope)
-
   implicit val scoptBuilder: OParserBuilder[HeyCommandConfig] =
     OParser.builder[HeyCommandConfig]
   import scoptBuilder._
+
+  val supportedScopes: List[HeyCommandScope] =
+    List(new AnsibleScope, new DockerScope, new SbtScope, new GitScope)
 
   private val parser = {
     OParser.sequence(
