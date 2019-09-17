@@ -61,6 +61,7 @@ object CommandScope {
   val Ansible = "ansible"
   val Docker = "docker"
   val Sbt = "sbt"
+  val Git = "git"
 }
 
 object Command {
@@ -71,6 +72,7 @@ object Command {
   val ContainerBash = "bash"
   val Purge = "purge"
   val Test = "test"
+  val Squash = "squash"
 }
 
 object HeyCommandConfig {
@@ -98,7 +100,8 @@ case class HeyCommandConfig(
     containerName: String = HeyCommandConfig.settings.defaultContainerName,
     debug: Boolean = false,
     testNameEnding: String = "",
-    purge: Boolean = false
+    purge: Boolean = false,
+    targetBranch: String = ""
 ) {
   val fullVerbosity: Boolean = verbosity == Full
 
@@ -128,7 +131,7 @@ sealed abstract class HeyElement[T: Read] {
       List(
         c => abbreviation.map(c.abbr).getOrElse(c),
         c => description.map(c.text).getOrElse(c),
-        c => if (required) c.required() else c
+        c => if (required) c.required() else c.optional()
       )
 
     optionals.foldLeft(
