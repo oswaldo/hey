@@ -73,6 +73,7 @@ object Command {
   val Purge = "purge"
   val Test = "test"
   val Squash = "squash"
+  val Checkout = "checkout"
 }
 
 object HeyCommandConfig {

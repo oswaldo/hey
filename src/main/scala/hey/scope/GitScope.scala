@@ -6,8 +6,9 @@
 
 package hey.scope
 
-import hey.scope.Command.Squash
+import hey.scope.Command.{Checkout, Squash}
 import hey.scope.CommandScope.Git
+import hey.util.IOUtil._
 import hey.util.ProcessUtil._
 import scopt.{OParser, OParserBuilder}
 
@@ -54,9 +55,43 @@ class GitScope(
     )
   )
 
+  private val CheckoutCommand = new HeyCommand(
+    name = Checkout,
+    commandAction = c => c.copy(command = Checkout),
+    description = Some(
+      "Checks out the given branch name or partial name (if only one match is found)"
+    ),
+    children = TargetBranchArgument :: Nil,
+    commandAndArguments = evalArguments(
+      _,
+      c => {
+        val branch = raw""""${c.targetBranch}""""
+        raw"""
+              |#!/usr/bin/env bash
+              |#as in bxm's reply to https://stackoverflow.com/questions/11340309/switch-branch-in-git-by-partial-name
+              |
+              |branch=$branch
+              |[ -z "$$branch" ] && { echo -e "Please provide one search string" ; exit 1 ; }
+              |MATCHES=( $$(git branch -a --color=never | sed -r 's|^[* ] (remotes/origin/)?||' | sort -u | grep -E "^((feature|bugfix|release|hotfix)/)?([A-Z]+-[1-9][0-9]*-)?${c.targetBranch}") )
+              |case $${#MATCHES[@]} in
+              |  ( 0 ) echo "No branches matched '${c.targetBranch}'" ; exit 1  ;;
+              |  ( 1 ) git checkout "$${MATCHES[0]}"      ; exit $$? ;;
+              |esac
+              |echo "Ambiguous search '${c.targetBranch}'; returned $${#MATCHES[@]} matches:"
+              |
+              |for ITEM in "$${MATCHES[@]}" ; do
+              |  echo -e "  $${ITEM}"
+              |done
+              |exit 1
+              |""".stripMargin
+      }
+    )
+  )
+
   override val elements: List[HeyElement[_]] =
     List(
-      SquashCommand
+      SquashCommand,
+      CheckoutCommand
     )
 
 }

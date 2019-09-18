@@ -7,6 +7,7 @@
 package hey.util
 
 import hey.scope.HeyCommandConfig
+import hey.util.IOUtil._
 
 object ProcessUtil {
 
@@ -50,7 +51,7 @@ object ProcessUtil {
       c: HeyCommandConfig,
       script: HeyCommandConfig => String
   ): List[String] =
-    List("sh", "-c", script(c))
+    List("bash", "-c", script(c))
 
   def eval(
       c: HeyCommandConfig,

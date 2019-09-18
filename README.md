@@ -59,7 +59,7 @@ ln -s target/scala-2.11/hey-out ~/bin/hey
 ```
 
 ```text
-hey                      
+hey                     
 Error: at least one of the supported commands should have been called
 hey 0.1
 Usage: hey [ansible|docker|sbt|git] [options] <args>...
@@ -92,10 +92,13 @@ Removes target folders
 Command: sbt test
 Runs all sbt tests or the ones matching the given suffix
   <suffix>                 This avoids having to use the FQCN, prepending an * to the call
-Command: git [squash] [<targetBranch>]
+Command: git [squash|checkout] [<targetBranch>] [<targetBranch>]
 Git related commands
 Command: git squash
 Resets index to target branch, allowing all changes to be in a single commit to be done afterwards.
+  <targetBranch>           Defaults to master
+Command: git checkout
+Checks out the given branch name or partial name (if only one match is found)
   <targetBranch>           Defaults to master
 You can define default values for command options at the hocon file /home/oswaldo/.hey/hey.conf
 ```
