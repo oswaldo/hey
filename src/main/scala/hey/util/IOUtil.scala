@@ -6,6 +6,7 @@
 
 package hey.util
 
+import java.io.Closeable
 import java.nio.file.{Files, Path, Paths}
 
 object IOUtil {
@@ -16,10 +17,12 @@ object IOUtil {
 
   def fileExists(path: String): Boolean = fileExists(Paths.get(path))
 
-  def readBytes(path: String): Option[Array[Byte]] = {
-    val p = Paths.get(path)
+  def readBytes(path: String): Option[Array[Byte]] =
+    readBytes(Paths.get(path))
+
+  def readBytes(p: Path): Option[Array[Byte]] = {
     if (Files.exists(p) && Files.isRegularFile(p)) {
-      Some(Files.readAllBytes(Paths.get(path)))
+      Some(Files.readAllBytes(p))
     } else {
       None
     }
@@ -27,5 +30,13 @@ object IOUtil {
 
   def readString(path: String): Option[String] =
     readBytes(path).map(new String(_))
+
+  def using[A, B <: Closeable](closeable: B)(f: B => A): A = {
+    try {
+      f(closeable)
+    } finally {
+      closeable.close()
+    }
+  }
 
 }

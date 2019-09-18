@@ -30,7 +30,9 @@ trait HeyCommandScope {
       if (e.children.isEmpty) {
         e.scoptDefinition
       } else {
-        e.scoptDefinition.children(e.children.map(childrenDefinition): _*)
+        e.scoptDefinition.children(
+          e.children.map(childrenDefinition): _*
+        )
       }
     }
     cmd(scope)
@@ -73,6 +75,7 @@ object Command {
   val Purge = "purge"
   val Test = "test"
   val Squash = "squash"
+  val Checkout = "checkout"
 }
 
 object HeyCommandConfig {
