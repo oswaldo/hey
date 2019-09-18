@@ -59,7 +59,7 @@ ln -s target/scala-2.11/hey-out ~/bin/hey
 ```
 
 ```text
-hey                     
+hey
 Error: at least one of the supported commands should have been called
 hey 0.1
 Usage: hey [ansible|docker|sbt|git] [options] <args>...
@@ -100,7 +100,7 @@ Resets index to target branch, allowing all changes to be in a single commit to 
 Command: git checkout
 Checks out the given branch name or partial name (if only one match is found)
   <targetBranch>           Defaults to master
-You can define default values for command options at the hocon file /home/oswaldo/.hey/hey.conf
+You can define default values for command options at the hocon file ~/.hey/hey.conf
 ```
 
 ## Roadmap
