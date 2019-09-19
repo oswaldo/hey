@@ -50,7 +50,8 @@ class DockerScope(
         "exec",
         "-it",
         c.containerName,
-        "bash"
+        "bash",
+        "-l"
       ),
     contextMessage = dockerContextMessage
   )
