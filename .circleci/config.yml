@@ -33,8 +33,7 @@ jobs:
 
       - run: sudo apt-get update
       - run: sudo apt-get install clang libgc-dev libunwind-dev
-      - run:
-        command: |
+      - run: |
           git clone https://github.com/google/re2.git
           cd re2
           make
