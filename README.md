@@ -1,5 +1,7 @@
 # hey
 
+[![CircleCI](https://circleci.com/gh/oswaldo/hey.svg?style=svg)](https://circleci.com/gh/oswaldo/hey)
+
 During development there is a whole lot of commands and tools you need to keep track of, with completely different syntaxes between them and sometimes even the same tool has different syntaxes for different operations in the same scope.
 
 Tired of repeatedly looking at sometimes cryptic examples to remember how to do a simple operation while at the end of the day I don't even care about the tool I used to achieve it, I'm starting this pet project to experiment with Scala-native to interface with the different tools, giving them a more sane abstraction level.
