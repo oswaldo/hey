@@ -33,6 +33,14 @@ jobs:
 
       - run: sudo apt-get update
       - run: sudo apt-get install clang libgc-dev libunwind-dev
+      - run:
+        command: |
+          git clone https://github.com/google/re2.git
+          cd re2
+          make
+          make test
+          make install
+          make testinstall
       
       - run: cat /dev/null | sbt test:compile
 
