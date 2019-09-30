@@ -36,10 +36,9 @@ jobs:
       - run: |
           git clone https://github.com/google/re2.git
           cd re2
-          make
-          make test
-          make install
-          make testinstall
+          sudo make
+          sudo make test
+          sudo make install
       
       - run: cat /dev/null | sbt test:compile
 
