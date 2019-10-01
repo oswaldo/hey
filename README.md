@@ -1,6 +1,6 @@
 # hey
 
-[![CircleCI](https://circleci.com/gh/oswaldo/hey.svg?style=svg)](https://circleci.com/gh/oswaldo/hey)
+[![CircleCI](https://circleci.com/gh/oswaldo/hey.svg?style=svg)](https://circleci.com/gh/oswaldo/hey) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2fcfcc93e5fc4a3fac50890202e3bcde)](https://www.codacy.com/manual/oswaldodantas/hey?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=oswaldo/hey&amp;utm_campaign=Badge_Grade)
 
 During development there is a whole lot of commands and tools you need to keep track of, with completely different syntaxes between them and sometimes even the same tool has different syntaxes for different operations in the same scope.
 
