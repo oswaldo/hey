@@ -107,13 +107,18 @@ You can define default values for command options at the hocon file ~/.hey/hey.c
 
 ## Roadmap
 
+### Done
+
+* Useful aliases for ansible, git, sbt and docker
+* Architecture to easy the tool extension
+* Config file for default option and argument values
+* Usage examples
+
 ### Short term
 
-* Useful aliases for git, sbt and docker
-* Commands to easy the tool extension
-* Config file for default option and argument values
+* More aliases for supported commands
 * "Summary verbosity"
-* Usage examples
+* Architecture documentation
 
 ### Middle term
 
