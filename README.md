@@ -41,8 +41,9 @@ Currently the code is in a very initial, prototype, not really working state. Th
        someHostRange[1:12].some.domain
    ```
 
-3. Install Scala native compilation OS packages (tested with Ubuntu): `sudo apt install clang libgc-dev libunwind-dev`
-4. We could have an Ansible playbook in the future to install all dependencies but for now, besides the other packages, manual build/install is required for this one: <https://github.com/google/re2/wiki/Install>
+3. Install Scala native compilation OS dependencies. We could have an Ansible playbook in the future to install all dependencies but for now there are a couple of manual steps that might be needed (YMMV as development started on machines that already had -many- other dependencies installed, let me know if any message pops-up about missing dependencies besides the ones covered below)
+  1. This was needed on an Ubuntu 18.04: `sudo apt install clang libgc-dev libunwind-dev`
+  2. Manual build/install is required for this one: <https://github.com/google/re2/wiki/Install>. If you are on macOS (tested with Catalina) and have brew installed, just call `brew install re2`
 5. `sbt nativeLink`
 6. You can use the natively compiled `hey` tool by calling `target/scala-2.11/hey-out`
 
@@ -53,8 +54,15 @@ Meanwhile, you could do a link to the target and have it available with a proper
 ```bash
 #if didn't have the ~/bin folder before
 cd
-mkdir ~/bin
+mkdir bin
+
+#if you are on Ubuntu, you need to reload .profile to be able to call commands from ~/bin
 source .profile
+#if you use some special OS/shell combination, please refer to its documentation on how would be the recommended approach to this
+#with zsh for instance you need to uncomment the line adding ~/bin to the path in .zshrc
+
+#go back to the project folder
+cd -
 #then link the thing
 ln -s target/scala-2.11/hey-out ~/bin/hey
 #then `cd` into wherever you want and...
