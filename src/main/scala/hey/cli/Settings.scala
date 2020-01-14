@@ -58,5 +58,7 @@ class Settings(config: Config = ConfigFactory.empty()) {
     config.getStringOrElse("hey.defaults.serviceName", "")
   val defaultContainerName: String =
     config.getStringOrElse("hey.defaults.containerName", "")
+  val defaultGeneratorName: String =
+    config.getStringOrElse("hey.defaults.generatorName", "")
 
 }

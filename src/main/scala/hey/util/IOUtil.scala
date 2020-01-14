@@ -6,10 +6,21 @@
 
 package hey.util
 
-import java.io.Closeable
+import java.io.{Closeable, File}
 import java.nio.file.{Files, Path, Paths}
 
 object IOUtil {
+
+  def fileName(fileNameAndPath: String): String =
+    new File(fileNameAndPath).getName
+
+  def absolutePath(fileNameAndPath: String): String =
+    new File(fileNameAndPath).getAbsolutePath
+
+  def absoluteParentPath(fileNameAndPath: String): String = {
+    val p = absolutePath(fileNameAndPath)
+    p.substring(0, p.lastIndexOf("/"))
+  }
 
   def homePath: String = System.getProperty("user.home")
 

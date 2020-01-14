@@ -17,7 +17,13 @@ object Main {
   import scoptBuilder._
 
   val supportedScopes: List[HeyCommandScope] =
-    List(new AnsibleScope, new DockerScope, new SbtScope, new GitScope)
+    List(
+      new AnsibleScope,
+      new DockerScope,
+      new SbtScope,
+      new GitScope,
+      new SwaggerCodegenCliScope
+    )
 
   private val parser = {
     OParser.sequence(

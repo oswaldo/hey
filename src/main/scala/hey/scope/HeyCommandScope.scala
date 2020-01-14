@@ -64,6 +64,7 @@ object CommandScope {
   val Docker = "docker"
   val Sbt = "sbt"
   val Git = "git"
+  val SwaggerCodegenCli = "swagger-codegen-cli"
 }
 
 object Command {
@@ -76,6 +77,7 @@ object Command {
   val Test = "test"
   val Squash = "squash"
   val Checkout = "checkout"
+  val Generate = "generate"
 }
 
 object HeyCommandConfig {
@@ -104,7 +106,10 @@ case class HeyCommandConfig(
     debug: Boolean = false,
     testNameEnding: String = "",
     purge: Boolean = false,
-    targetBranch: String = ""
+    targetBranch: String = "",
+    inputFile: String = "",
+    outputFolder: String = "",
+    generatorName: String = HeyCommandConfig.settings.defaultGeneratorName
 ) {
   val fullVerbosity: Boolean = verbosity == Full
 
