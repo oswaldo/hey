@@ -119,6 +119,7 @@ You can define default values for command options at the hocon file ~/.hey/hey.c
 * More aliases for supported commands
 * "Summary verbosity"
 * Architecture documentation
+* Publish as dependency / allow private extensions
 
 ### Middle term
 

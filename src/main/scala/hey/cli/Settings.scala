@@ -45,9 +45,10 @@ object Settings:
         optional(path, f).getOrElse(default)
 
 class Settings(config: Config = ConfigFactory.empty()):
+  private val defaultEmptyString = ""
   val defaultServerGroup: String =
-    config.getStringOrElse("hey.defaults.serverGroup", "")
+    config.getStringOrElse("hey.defaults.serverGroup", defaultEmptyString)
   val defaultServiceName: String =
-    config.getStringOrElse("hey.defaults.serviceName", "")
+    config.getStringOrElse("hey.defaults.serviceName", defaultEmptyString)
   val defaultContainerName: String =
-    config.getStringOrElse("hey.defaults.containerName", "")
+    config.getStringOrElse("hey.defaults.containerName", defaultEmptyString)
