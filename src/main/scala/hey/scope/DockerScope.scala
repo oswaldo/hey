@@ -20,7 +20,7 @@ class DockerScope(
 
   override val description: String = "Docker related commands"
 
-  def dockerContextMessage(c: HeyCommandConfig) =
+  private def dockerContextMessage(c: HeyCommandConfig) =
     s"serverGroup: ${c.containerName}"
 
   override val validate: HeyCommandConfig => Option[String] = { c =>

@@ -11,7 +11,7 @@ import hey.util.IOUtil._
 
 object ProcessUtil:
 
-  def confirm[T](
+  private def confirm[T](
       f: => T,
       message: String = "Are you sure you want to continue?"
   ): Option[T] =
@@ -29,12 +29,12 @@ object ProcessUtil:
       case 'y' => Option(f)
       case 'n' => None
 
-  def confirmBoolean(
+  private def confirmBoolean(
       message: String = "Are you sure you want to continue?"
   ): Boolean =
     confirm[Boolean](true, message).getOrElse(false)
 
-  def printIfSome(
+  private def printIfSome(
       c: HeyCommandConfig,
       s: String,
       error: Boolean = false

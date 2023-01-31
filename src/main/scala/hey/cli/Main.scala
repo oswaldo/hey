@@ -16,7 +16,7 @@ object Main:
     OParser.builder[HeyCommandConfig]
   import scoptBuilder._
 
-  val supportedScopes: List[HeyCommandScope] =
+  private val supportedScopes: List[HeyCommandScope] =
     List(new AnsibleScope, new DockerScope, new SbtScope, new GitScope)
 
   private val parser =
@@ -38,12 +38,12 @@ object Main:
       }: _*
     )
 
-  def generalValidation(c: HeyCommandConfig): Option[String] =
+  private def generalValidation(c: HeyCommandConfig): Option[String] =
     if c.commandScope.isEmpty then
       Some("at least one of the supported commands should have been called")
     else None
 
-  def validate(c: HeyCommandConfig): Either[String, Unit] =
+  private def validate(c: HeyCommandConfig): Either[String, Unit] =
     generalValidation(c).map(failure).getOrElse {
       supportedScopes.view
         .map(scope => scope.validate(c))
@@ -55,7 +55,7 @@ object Main:
           success
     }
 
-  def run(c: HeyCommandConfig): Unit =
+  private def run(c: HeyCommandConfig): Unit =
     supportedScopes.map(_.proceed(c)).find(!_)
 
   def main(args: Array[String]): Unit =

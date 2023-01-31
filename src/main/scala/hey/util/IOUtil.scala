@@ -13,14 +13,14 @@ object IOUtil:
 
   def homePath: String = System.getProperty("user.home")
 
-  def fileExists(p: Path): Boolean = Files.exists(p) && Files.isRegularFile(p)
+  private def fileExists(p: Path): Boolean = Files.exists(p) && Files.isRegularFile(p)
 
   def fileExists(path: String): Boolean = fileExists(Paths.get(path))
 
-  def readBytes(path: String): Option[Array[Byte]] =
+  private def readBytes(path: String): Option[Array[Byte]] =
     readBytes(Paths.get(path))
 
-  def readBytes(p: Path): Option[Array[Byte]] =
+  private def readBytes(p: Path): Option[Array[Byte]] =
     if Files.exists(p) && Files.isRegularFile(p) then Some(Files.readAllBytes(p))
     else None
 

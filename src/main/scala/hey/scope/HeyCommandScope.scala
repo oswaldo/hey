@@ -70,7 +70,7 @@ object Command:
 
 object HeyCommandConfig:
 
-  val settings: Settings =
+  private val settings: Settings =
     Settings.read(Settings.settingsPath).getOrElse(new Settings())
 
   object implicits:
@@ -125,7 +125,7 @@ sealed abstract class HeyElement[T: Read]:
         .action(scoptAction)
     )((c, f) => f(c))
 
-  def proceedAfterExecuting: Boolean = true
+  private def proceedAfterExecuting: Boolean = true
 
   def execute(
       c: HeyCommandConfig

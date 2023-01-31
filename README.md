@@ -2,11 +2,11 @@
 
 [![CircleCI](https://circleci.com/gh/oswaldo/hey.svg?style=svg)](https://circleci.com/gh/oswaldo/hey) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2fcfcc93e5fc4a3fac50890202e3bcde)](https://www.codacy.com/manual/oswaldodantas/hey?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=oswaldo/hey&amp;utm_campaign=Badge_Grade)
 
-During development there is a whole lot of commands and tools you need to keep track of, with completely different syntaxes between them and sometimes even the same tool has different syntaxes for different operations in the same scope.
+During development there are many commands and tools you need to keep track of, with completely different syntaxes between them and sometimes even the same tool has different syntaxes for different operations in the same scope.
 
 Tired of repeatedly looking at sometimes cryptic examples to remember how to do a simple operation while at the end of the day I don't even care about the tool I used to achieve it, I'm starting this pet project to experiment with Scala-native to interface with the different tools, giving them a more sane abstraction level.
 
-The first operations I intend to simplify are to request and change the status of a service running in multiple servers in a non intrusive manner.
+The first operations I intend to simplify are to request and change the status of a service running in multiple servers in a non-intrusive manner.
 
 For that, I'll be forwarding calls to Ansible. For comparison, this is an ad-hoc way to get the status and restart some service in a server group using Ansible:
 
@@ -30,7 +30,7 @@ hey restart -sg someServerGroup -sn some-service-name
 
 ## Status
 
-Currently the code is in a very initial, prototype, not really working state. The text here is mostly a mix of stuff currently being experimented with and notes about how I got there, so although they worked for me at some point, there is no guarantee that following the steps would lead to any usable result. Still, I would recommend watching this repo as I expect to have something usable soon :)
+Currently, the code is in a very initial, prototype, not really working state. The text here is mostly a mix of stuff currently being experimented with and notes about how I got there, so although they worked for me at some point, there is no guarantee that following the steps would lead to any usable result. Still, I would recommend watching this repo as I expect to have something usable soon :)
 
 1. Install Ansible: `sudo apt install ansible`
 2. Add server groups to the `/etc/ansible/hosts` file:

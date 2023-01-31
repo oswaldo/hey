@@ -18,3 +18,10 @@ headerLicense := Some(
   HeaderLicense
     .MIT("2019", "Oswaldo C. Dantas Jr", HeaderLicenseStyle.SpdxSyntax)
 )
+
+scalacOptions ++= Seq(
+  "-Xfatal-warnings",
+  "-deprecation",
+  "-feature",
+  "-unchecked"
+)

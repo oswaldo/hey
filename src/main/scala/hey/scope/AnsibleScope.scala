@@ -18,7 +18,7 @@ class AnsibleScope(
 
   override val description: String = "Ansible related commands"
 
-  def ansibleContextMessage(c: HeyCommandConfig) =
+  private def ansibleContextMessage(c: HeyCommandConfig) =
     s"serverGroup: ${c.serverGroup}, serviceName: ${c.serviceName}"
 
   override val validate: HeyCommandConfig => Option[String] = { c =>
