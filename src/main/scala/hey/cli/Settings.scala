@@ -34,10 +34,8 @@ object Settings:
         getOrElse(path, underlying.getString, default)
 
       private def optional[T](path: String, f: String => T): Option[T] =
-        if underlying.hasPath(path) then
-          Some(f(path))
-        else
-          None
+        if underlying.hasPath(path) then Some(f(path))
+        else None
 
       private def getOrElse[T](
           path: String,
@@ -46,7 +44,6 @@ object Settings:
       ): T =
         optional(path, f).getOrElse(default)
 
-
 class Settings(config: Config = ConfigFactory.empty()):
   val defaultServerGroup: String =
     config.getStringOrElse("hey.defaults.serverGroup", "")
@@ -54,4 +51,3 @@ class Settings(config: Config = ConfigFactory.empty()):
     config.getStringOrElse("hey.defaults.serviceName", "")
   val defaultContainerName: String =
     config.getStringOrElse("hey.defaults.containerName", "")
-

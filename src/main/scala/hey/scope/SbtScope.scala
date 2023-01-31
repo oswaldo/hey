@@ -31,8 +31,7 @@ class SbtScope(
     name = Purge,
     commandAction = c => c.copy(command = Purge),
     description = Some("Removes target folders"),
-    commandAndArguments =
-      evalArguments(_, _ => "rm -rf target; rm -rf project/target"),
+    commandAndArguments = evalArguments(_, _ => "rm -rf target; rm -rf project/target"),
     confirmationMessage = Some(
       "This will remove target and project/target folders. Are you sure?"
     )
@@ -69,4 +68,3 @@ class SbtScope(
       PurgeCommand,
       TestCommand
     )
-

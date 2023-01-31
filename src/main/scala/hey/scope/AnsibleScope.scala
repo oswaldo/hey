@@ -26,8 +26,7 @@ class AnsibleScope(
       Some(
         s"for ansible commands, serverGroup and serviceName must be defined, through command line options on in the conf file in $settingsPath"
       )
-    else
-      None
+    else None
   }
 
   private val ServerGroupOption = new HeyOption[String](
@@ -104,4 +103,3 @@ class AnsibleScope(
       RestartCommand,
       StopCommand
     )
-

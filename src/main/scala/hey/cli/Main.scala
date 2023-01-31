@@ -31,8 +31,8 @@ object Main:
             .text(s"defaults to full. any other value means silent")
         ) ++
           supportedScopes.map(_.scoptDefinition) :+ note(
-          s"You can define default values for command options at the hocon file ${Settings.settingsPath}"
-        ) :+
+            s"You can define default values for command options at the hocon file ${Settings.settingsPath}"
+          ) :+
           checkConfig(validate)
         elements
       }: _*
@@ -41,8 +41,7 @@ object Main:
   def generalValidation(c: HeyCommandConfig): Option[String] =
     if c.commandScope.isEmpty then
       Some("at least one of the supported commands should have been called")
-    else
-      None
+    else None
 
   def validate(c: HeyCommandConfig): Either[String, Unit] =
     generalValidation(c).map(failure).getOrElse {
@@ -64,5 +63,5 @@ object Main:
       case Some(c) =>
         run(c)
       case None =>
-      //bad arguments. nothing to do
+      // bad arguments. nothing to do
     sys.exit()

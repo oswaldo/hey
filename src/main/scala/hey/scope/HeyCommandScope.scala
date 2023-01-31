@@ -22,13 +22,12 @@ trait HeyCommandScope:
 
   def elements: List[HeyElement[_]]
 
-  def scoptDefinition(
-      implicit scoptBuilder: OParserBuilder[HeyCommandConfig]
+  def scoptDefinition(implicit
+      scoptBuilder: OParserBuilder[HeyCommandConfig]
   ): OParser[_, HeyCommandConfig] =
     import scoptBuilder._
     def childrenDefinition(e: HeyElement[_]): OParser[_, HeyCommandConfig] =
-      if e.children.isEmpty then
-        e.scoptDefinition
+      if e.children.isEmpty then e.scoptDefinition
       else
         e.scoptDefinition.children(
           e.children.map(childrenDefinition): _*
@@ -37,9 +36,7 @@ trait HeyCommandScope:
       .action((_, c) => c.copy(commandScope = scope))
       .text(description)
       .children(
-        elements.map(
-          e => childrenDefinition(e)
-        ): _*
+        elements.map(e => childrenDefinition(e)): _*
       )
 
   val validate: HeyCommandConfig => Option[String] = _ => None
@@ -82,7 +79,6 @@ object HeyCommandConfig:
       def commanded(implicit c: HeyCommandConfig): Boolean = c.command == s
       def scoped(implicit c: HeyCommandConfig): Boolean = c.commandScope == s
 
-
 case class HeyCommandConfig(
     verbosity: String = Full,
     commandScope: String = "",
@@ -99,7 +95,6 @@ case class HeyCommandConfig(
   val fullVerbosity: Boolean = verbosity == Full
 
   def commandedAny(s: String*): Boolean = s.toSet.contains(command)
-
 
 sealed abstract class HeyElement[T: Read]:
 
@@ -118,8 +113,7 @@ sealed abstract class HeyElement[T: Read]:
 
   def scoptDefinition: OParser[T, HeyCommandConfig] =
 
-    val optionals
-        : List[OParser[T, HeyCommandConfig] => OParser[T, HeyCommandConfig]] =
+    val optionals: List[OParser[T, HeyCommandConfig] => OParser[T, HeyCommandConfig]] =
       List(
         c => abbreviation.map(c.abbr).getOrElse(c),
         c => description.map(c.text).getOrElse(c),
@@ -149,8 +143,7 @@ sealed abstract class HeyElement[T: Read]:
     )
 
   def proceed(c: HeyCommandConfig): Boolean =
-    if c.commandedAny(name) then
-      execute(c)
+    if c.commandedAny(name) then execute(c)
     proceedAfterExecuting
 
 class HeyOption[T: Read](
@@ -159,8 +152,7 @@ class HeyOption[T: Read](
       (_: T, c: HeyCommandConfig) => c,
     override val abbreviation: Option[String] = None,
     override val description: Option[String] = None,
-    override val commandAndArguments: HeyCommandConfig => List[String] = _ =>
-      Nil,
+    override val commandAndArguments: HeyCommandConfig => List[String] = _ => Nil,
     override val contextMessage: HeyCommandConfig => String = _ => "",
     override val required: Boolean = false,
     override val confirmationMessage: Option[String] = None,
@@ -177,8 +169,7 @@ class HeyCommand(
     commandAction: HeyCommandConfig => HeyCommandConfig = c => c,
     override val abbreviation: Option[String] = None,
     override val description: Option[String] = None,
-    override val commandAndArguments: HeyCommandConfig => List[String] = _ =>
-      Nil,
+    override val commandAndArguments: HeyCommandConfig => List[String] = _ => Nil,
     override val contextMessage: HeyCommandConfig => String = _ => "",
     override val required: Boolean = false,
     override val confirmationMessage: Option[String] = None,
@@ -199,8 +190,7 @@ class HeyArgument[T: Read](
       (_: T, c: HeyCommandConfig) => c,
     override val abbreviation: Option[String] = None,
     override val description: Option[String] = None,
-    override val commandAndArguments: HeyCommandConfig => List[String] = _ =>
-      Nil,
+    override val commandAndArguments: HeyCommandConfig => List[String] = _ => Nil,
     override val contextMessage: HeyCommandConfig => String = _ => "",
     override val required: Boolean = false,
     override val confirmationMessage: Option[String] = None,

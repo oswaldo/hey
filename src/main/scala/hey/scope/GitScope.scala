@@ -30,10 +30,8 @@ class GitScope(
   )
 
   private def targetBranch(c: HeyCommandConfig) =
-    if c.targetBranch.isEmpty then
-      "master"
-    else
-      c.targetBranch
+    if c.targetBranch.isEmpty then "master"
+    else c.targetBranch
 
   private val SquashCommand = new HeyCommand(
     name = Squash,
@@ -69,23 +67,23 @@ class GitScope(
       c => {
         val branch = targetBranch(c)
         raw"""
-              |#!/usr/bin/env bash
-              |#as in bxm's reply to https://stackoverflow.com/questions/11340309/switch-branch-in-git-by-partial-name
-              |
-              |branch=$branch
-              |[ -z "$$branch" ] && { echo -e "Please provide one search string" ; exit 1 ; }
-              |MATCHES=( $$(git branch -a --color=never | sed -r 's|^[* ] (remotes/origin/)?||' | sort -u | grep -E "^((feature|bugfix|release|hotfix)/)?([A-Z]+-[1-9][0-9]*-)?$branch") )
-              |case $${#MATCHES[@]} in
-              |  ( 0 ) echo "No branches matched '$branch'" ; exit 1  ;;
-              |  ( 1 ) git checkout "$${MATCHES[0]}"      ; exit $$? ;;
-              |esac
-              |echo "Ambiguous search '$branch'; returned $${#MATCHES[@]} matches:"
-              |
-              |for ITEM in "$${MATCHES[@]}" ; do
-              |  echo -e "  $${ITEM}"
-              |done
-              |exit 1
-              |""".stripMargin
+             |#!/usr/bin/env bash
+             |#as in bxm's reply to https://stackoverflow.com/questions/11340309/switch-branch-in-git-by-partial-name
+             |
+             |branch=$branch
+             |[ -z "$$branch" ] && { echo -e "Please provide one search string" ; exit 1 ; }
+             |MATCHES=( $$(git branch -a --color=never | sed -r 's|^[* ] (remotes/origin/)?||' | sort -u | grep -E "^((feature|bugfix|release|hotfix)/)?([A-Z]+-[1-9][0-9]*-)?$branch") )
+             |case $${#MATCHES[@]} in
+             |  ( 0 ) echo "No branches matched '$branch'" ; exit 1  ;;
+             |  ( 1 ) git checkout "$${MATCHES[0]}"      ; exit $$? ;;
+             |esac
+             |echo "Ambiguous search '$branch'; returned $${#MATCHES[@]} matches:"
+             |
+             |for ITEM in "$${MATCHES[@]}" ; do
+             |  echo -e "  $${ITEM}"
+             |done
+             |exit 1
+             |""".stripMargin
       }
     )
   )
@@ -95,4 +93,3 @@ class GitScope(
       SquashCommand,
       CheckoutCommand
     )
-

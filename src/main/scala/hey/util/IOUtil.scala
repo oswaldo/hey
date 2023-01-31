@@ -21,10 +21,8 @@ object IOUtil:
     readBytes(Paths.get(path))
 
   def readBytes(p: Path): Option[Array[Byte]] =
-    if Files.exists(p) && Files.isRegularFile(p) then
-      Some(Files.readAllBytes(p))
-    else
-      None
+    if Files.exists(p) && Files.isRegularFile(p) then Some(Files.readAllBytes(p))
+    else None
 
   def readString(path: String): Option[String] =
     readBytes(path).map(new String(_))
@@ -34,4 +32,3 @@ object IOUtil:
       f(closeable)
     finally
       closeable.close()
-

@@ -28,8 +28,7 @@ class DockerScope(
       Some(
         s"for docker commands, containerName must be defined, through command line option on in the conf file in $settingsPath"
       )
-    else
-      None
+    else None
   }
 
   private val ContainerNameOption = new HeyOption[String](
@@ -60,4 +59,3 @@ class DockerScope(
       ContainerNameOption,
       BashCommand
     )
-

@@ -39,8 +39,7 @@ object ProcessUtil:
       s: String,
       error: Boolean = false
   ): Unit =
-    if c.fullVerbosity && s.trim.nonEmpty then
-      if error then System.err.println(s) else println(s)
+    if c.fullVerbosity && s.trim.nonEmpty then if error then System.err.println(s) else println(s)
 
   def evalArguments(
       c: HeyCommandConfig,
@@ -87,19 +86,19 @@ object ProcessUtil:
         printIfSome(
           c,
           s"Will execute the following command: ${commandAndArguments
-            .map(arg => if arg.contains(" ") then s""""$arg"""" else arg)
-            .mkString(" ")}"
+              .map(arg => if arg.contains(" ") then s""""$arg"""" else arg)
+              .mkString(" ")}"
         )
 
         try
-          //region using java classes because scala process handling need threads and that is not yet supported by scala-native
+          // region using java classes because scala process handling need threads and that is not yet supported by scala-native
           val process =
             new ProcessBuilder().inheritIO
               .command(commandAndArguments: _*)
               .start()
           Runtime.getRuntime.exec(commandAndArguments.toArray)
           process.waitFor()
-          //endregion
+          // endregion
           printIfSome(
             c,
             s"Process ended. Exit value: ${process.exitValue()}",
@@ -110,4 +109,3 @@ object ProcessUtil:
             println("Failed to execute command")
             e.printStackTrace()
             System.exit(-1)
-
