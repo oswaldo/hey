@@ -13,7 +13,7 @@ import scopt.{OParser, OParserBuilder}
 class AnsibleScope(
     override implicit val scoptBuilder: OParserBuilder[HeyCommandConfig] =
       OParser.builder[HeyCommandConfig]
-) extends HeyCommandScope {
+) extends HeyCommandScope:
   override val scope: String = Ansible
 
   override val description: String = "Ansible related commands"
@@ -22,13 +22,12 @@ class AnsibleScope(
     s"serverGroup: ${c.serverGroup}, serviceName: ${c.serviceName}"
 
   override val validate: HeyCommandConfig => Option[String] = { c =>
-    if (c.commandScope == Ansible && (c.serverGroup.isEmpty || c.serviceName.isEmpty)) {
+    if c.commandScope == Ansible && (c.serverGroup.isEmpty || c.serviceName.isEmpty) then
       Some(
         s"for ansible commands, serverGroup and serviceName must be defined, through command line options on in the conf file in $settingsPath"
       )
-    } else {
+    else
       None
-    }
   }
 
   private val ServerGroupOption = new HeyOption[String](
@@ -106,4 +105,3 @@ class AnsibleScope(
       StopCommand
     )
 
-}

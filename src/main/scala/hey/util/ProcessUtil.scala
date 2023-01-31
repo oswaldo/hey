@@ -9,29 +9,25 @@ package hey.util
 import hey.scope.HeyCommandConfig
 import hey.util.IOUtil._
 
-object ProcessUtil {
+object ProcessUtil:
 
   def confirm[T](
       f: => T,
       message: String = "Are you sure you want to continue?"
-  ): Option[T] = {
+  ): Option[T] =
     println(s"$message [y|n]")
     var k = -1
     var printHelp = true
-    while (k != 'y' && k != 'n') {
-      if (k != -1 && printHelp) {
+    while k != 'y' && k != 'n' do
+      if k != -1 && printHelp then
         println(
           "Enter y if you want to execute the action, otherwise, n to abort"
         )
         printHelp = false
-      }
       k = Console.in.read()
-    }
-    k match {
+    k match
       case 'y' => Option(f)
       case 'n' => None
-    }
-  }
 
   def confirmBoolean(
       message: String = "Are you sure you want to continue?"
@@ -43,9 +39,8 @@ object ProcessUtil {
       s: String,
       error: Boolean = false
   ): Unit =
-    if (c.fullVerbosity && !s.trim.isEmpty) {
-      if (error) System.err.println(s) else println(s)
-    }
+    if c.fullVerbosity && s.trim.nonEmpty then
+      if error then System.err.println(s) else println(s)
 
   def evalArguments(
       c: HeyCommandConfig,
@@ -80,23 +75,23 @@ object ProcessUtil {
       callDescription: String,
       confirmationMessage: Option[String],
       commandAndArguments: List[String]
-  ): Unit = {
-    if (confirmationMessage.forall(confirmBoolean)) {
+  ): Unit =
+    if confirmationMessage.forall(confirmBoolean) then
       printIfSome(c, callDescription)
-      if (commandAndArguments.isEmpty) {
+      if commandAndArguments.isEmpty then
         printIfSome(
           c,
           "No command would be executed :/ There might be a problem with the implementation of the given HeyElement"
         )
-      } else {
+      else
         printIfSome(
           c,
           s"Will execute the following command: ${commandAndArguments
-            .map(arg => if (arg.contains(" ")) s""""$arg"""" else arg)
+            .map(arg => if arg.contains(" ") then s""""$arg"""" else arg)
             .mkString(" ")}"
         )
 
-        try {
+        try
           //region using java classes because scala process handling need threads and that is not yet supported by scala-native
           val process =
             new ProcessBuilder().inheritIO
@@ -110,14 +105,9 @@ object ProcessUtil {
             s"Process ended. Exit value: ${process.exitValue()}",
             error = process.exitValue() != 0
           )
-        } catch {
+        catch
           case e: Throwable =>
             println("Failed to execute command")
             e.printStackTrace()
             System.exit(-1)
-        }
-      }
-    }
-  }
 
-}

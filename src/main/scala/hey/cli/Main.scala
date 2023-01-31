@@ -10,7 +10,7 @@ import hey.scope._
 import hey.scope.HeyCommandConfig
 import scopt.{OParser, OParserBuilder}
 
-object Main {
+object Main:
 
   implicit val scoptBuilder: OParserBuilder[HeyCommandConfig] =
     OParser.builder[HeyCommandConfig]
@@ -19,7 +19,7 @@ object Main {
   val supportedScopes: List[HeyCommandScope] =
     List(new AnsibleScope, new DockerScope, new SbtScope, new GitScope)
 
-  private val parser = {
+  private val parser =
     OParser.sequence(
       programName("hey"), {
         val elements = List(
@@ -37,40 +37,32 @@ object Main {
         elements
       }: _*
     )
-  }
 
-  def generalValidation(c: HeyCommandConfig): Option[String] = {
-    if (c.commandScope.isEmpty) {
+  def generalValidation(c: HeyCommandConfig): Option[String] =
+    if c.commandScope.isEmpty then
       Some("at least one of the supported commands should have been called")
-    } else {
+    else
       None
-    }
-  }
 
-  def validate(c: HeyCommandConfig): Either[String, Unit] = {
+  def validate(c: HeyCommandConfig): Either[String, Unit] =
     generalValidation(c).map(failure).getOrElse {
       supportedScopes.view
         .map(scope => scope.validate(c))
         .find(_.isDefined)
-        .flatten match {
+        .flatten match
         case Some(failureMessage) =>
           failure(failureMessage)
         case None =>
           success
-      }
     }
-  }
 
   def run(c: HeyCommandConfig): Unit =
     supportedScopes.map(_.proceed(c)).find(!_)
 
-  def main(args: Array[String]): Unit = {
-    OParser.parse(parser, args, HeyCommandConfig()) match {
+  def main(args: Array[String]): Unit =
+    OParser.parse(parser, args, HeyCommandConfig()) match
       case Some(c) =>
         run(c)
       case None =>
       //bad arguments. nothing to do
-    }
     sys.exit()
-  }
-}

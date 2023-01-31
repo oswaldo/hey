@@ -14,7 +14,7 @@ import scopt.{OParser, OParserBuilder}
 class DockerScope(
     override implicit val scoptBuilder: OParserBuilder[HeyCommandConfig] =
       OParser.builder[HeyCommandConfig]
-) extends HeyCommandScope {
+) extends HeyCommandScope:
 
   override val scope: String = Docker
 
@@ -24,13 +24,12 @@ class DockerScope(
     s"serverGroup: ${c.containerName}"
 
   override val validate: HeyCommandConfig => Option[String] = { c =>
-    if (c.commandScope == Docker && c.containerName.isEmpty) {
+    if c.commandScope == Docker && c.containerName.isEmpty then
       Some(
         s"for docker commands, containerName must be defined, through command line option on in the conf file in $settingsPath"
       )
-    } else {
+    else
       None
-    }
   }
 
   private val ContainerNameOption = new HeyOption[String](
@@ -62,4 +61,3 @@ class DockerScope(
       BashCommand
     )
 
-}

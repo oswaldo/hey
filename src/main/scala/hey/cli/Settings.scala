@@ -11,7 +11,7 @@ import org.ekrich.config.{Config, ConfigFactory}
 import hey.cli.Settings.implicits._
 import hey.util.IOUtil.homePath
 
-object Settings {
+object Settings:
 
   val settingsPath = s"$homePath/.hey/hey.conf"
 
@@ -21,9 +21,9 @@ object Settings {
   def read(path: String): Option[Settings] =
     readConfig(path).map(new Settings(_))
 
-  object implicits {
+  object implicits:
 
-    implicit class RichConfig(val underlying: Config) extends AnyVal {
+    implicit class RichConfig(val underlying: Config) extends AnyVal:
       def getOptionalBoolean(path: String): Option[Boolean] =
         optional(path, underlying.getBoolean)
 
@@ -34,11 +34,10 @@ object Settings {
         getOrElse(path, underlying.getString, default)
 
       private def optional[T](path: String, f: String => T): Option[T] =
-        if (underlying.hasPath(path)) {
+        if underlying.hasPath(path) then
           Some(f(path))
-        } else {
+        else
           None
-        }
 
       private def getOrElse[T](
           path: String,
@@ -46,12 +45,9 @@ object Settings {
           default: => T
       ): T =
         optional(path, f).getOrElse(default)
-    }
 
-  }
-}
 
-class Settings(config: Config = ConfigFactory.empty()) {
+class Settings(config: Config = ConfigFactory.empty()):
   val defaultServerGroup: String =
     config.getStringOrElse("hey.defaults.serverGroup", "")
   val defaultServiceName: String =
@@ -59,4 +55,3 @@ class Settings(config: Config = ConfigFactory.empty()) {
   val defaultContainerName: String =
     config.getStringOrElse("hey.defaults.containerName", "")
 
-}

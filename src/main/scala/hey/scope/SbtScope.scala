@@ -14,7 +14,7 @@ import scopt.{OParser, OParserBuilder}
 class SbtScope(
     override implicit val scoptBuilder: OParserBuilder[HeyCommandConfig] =
       OParser.builder[HeyCommandConfig]
-) extends HeyCommandScope {
+) extends HeyCommandScope:
 
   override val scope: String = Sbt
 
@@ -54,8 +54,8 @@ class SbtScope(
     ),
     children = TestNameEndingArgument :: Nil,
     commandAndArguments = c =>
-      "sbt" :: (if (c.debug) List("-Ddebug=1") else Nil) ++ List(
-        if (c.testNameEnding.isEmpty) {
+      "sbt" :: (if c.debug then List("-Ddebug=1") else Nil) ++ List(
+        if c.testNameEnding.isEmpty then {
           "test"
         } else {
           s"""testOnly *${c.testNameEnding}"""
@@ -70,4 +70,3 @@ class SbtScope(
       TestCommand
     )
 
-}

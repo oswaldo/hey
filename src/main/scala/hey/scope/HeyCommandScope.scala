@@ -11,7 +11,7 @@ import hey.scope.Verbosity.Full
 import hey.util.ProcessUtil
 import scopt.{OParser, OParserBuilder, Read}
 
-trait HeyCommandScope {
+trait HeyCommandScope:
 
   implicit val scoptBuilder: OParserBuilder[HeyCommandConfig] =
     OParser.builder[HeyCommandConfig]
@@ -24,17 +24,15 @@ trait HeyCommandScope {
 
   def scoptDefinition(
       implicit scoptBuilder: OParserBuilder[HeyCommandConfig]
-  ): OParser[_, HeyCommandConfig] = {
+  ): OParser[_, HeyCommandConfig] =
     import scoptBuilder._
-    def childrenDefinition(e: HeyElement[_]): OParser[_, HeyCommandConfig] = {
-      if (e.children.isEmpty) {
+    def childrenDefinition(e: HeyElement[_]): OParser[_, HeyCommandConfig] =
+      if e.children.isEmpty then
         e.scoptDefinition
-      } else {
+      else
         e.scoptDefinition.children(
           e.children.map(childrenDefinition): _*
         )
-      }
-    }
     cmd(scope)
       .action((_, c) => c.copy(commandScope = scope))
       .text(description)
@@ -43,7 +41,6 @@ trait HeyCommandScope {
           e => childrenDefinition(e)
         ): _*
       )
-  }
 
   val validate: HeyCommandConfig => Option[String] = _ => None
 
@@ -52,21 +49,18 @@ trait HeyCommandScope {
       .map(_.proceed(c))
       .find(!_)
       .getOrElse(true)
-}
 
-object Verbosity {
+object Verbosity:
   val Full = "full"
-}
 
-object CommandScope {
+object CommandScope:
   val Hey = "hey"
   val Ansible = "ansible"
   val Docker = "docker"
   val Sbt = "sbt"
   val Git = "git"
-}
 
-object Command {
+object Command:
   val Echo = "echo"
   val Status = "status"
   val Restart = "restart"
@@ -76,22 +70,18 @@ object Command {
   val Test = "test"
   val Squash = "squash"
   val Checkout = "checkout"
-}
 
-object HeyCommandConfig {
+object HeyCommandConfig:
 
   val settings: Settings =
     Settings.read(Settings.settingsPath).getOrElse(new Settings())
 
-  object implicits {
+  object implicits:
 
-    implicit class HeyString(s: String) {
+    implicit class HeyString(s: String):
       def commanded(implicit c: HeyCommandConfig): Boolean = c.command == s
       def scoped(implicit c: HeyCommandConfig): Boolean = c.commandScope == s
-    }
 
-  }
-}
 
 case class HeyCommandConfig(
     verbosity: String = Full,
@@ -105,14 +95,13 @@ case class HeyCommandConfig(
     testNameEnding: String = "",
     purge: Boolean = false,
     targetBranch: String = ""
-) {
+):
   val fullVerbosity: Boolean = verbosity == Full
 
   def commandedAny(s: String*): Boolean = s.toSet.contains(command)
 
-}
 
-sealed abstract class HeyElement[T: Read] {
+sealed abstract class HeyElement[T: Read]:
 
   val name: String
   val scoptElement: String => OParser[T, HeyCommandConfig]
@@ -127,47 +116,42 @@ sealed abstract class HeyElement[T: Read] {
 
   implicit val scoptBuilder: OParserBuilder[HeyCommandConfig]
 
-  def scoptDefinition: OParser[T, HeyCommandConfig] = {
+  def scoptDefinition: OParser[T, HeyCommandConfig] =
 
     val optionals
         : List[OParser[T, HeyCommandConfig] => OParser[T, HeyCommandConfig]] =
       List(
         c => abbreviation.map(c.abbr).getOrElse(c),
         c => description.map(c.text).getOrElse(c),
-        c => if (required) c.required() else c.optional()
+        c => if required then c.required() else c.optional()
       )
 
     optionals.foldLeft(
       scoptElement(name)
         .action(scoptAction)
     )((c, f) => f(c))
-  }
 
   def proceedAfterExecuting: Boolean = true
 
   def execute(
       c: HeyCommandConfig
-  ): Unit = {
+  ): Unit =
 
     val callDescription: String = List(
       description,
-      Option(contextMessage(c)).map(m => if (m.isEmpty) m else s"($m)")
-    ).filter(s => s.isDefined && !s.get.isEmpty).flatten.mkString(" ")
+      Option(contextMessage(c)).map(m => if m.isEmpty then m else s"($m)")
+    ).filter(s => s.isDefined && s.get.nonEmpty).flatten.mkString(" ")
     ProcessUtil.execute(
       c,
       callDescription,
       confirmationMessage,
       commandAndArguments(c)
     )
-  }
 
-  def proceed(c: HeyCommandConfig): Boolean = {
-    if (c.commandedAny(name)) {
+  def proceed(c: HeyCommandConfig): Boolean =
+    if c.commandedAny(name) then
       execute(c)
-    }
     proceedAfterExecuting
-  }
-}
 
 class HeyOption[T: Read](
     override val name: String,
@@ -182,12 +166,11 @@ class HeyOption[T: Read](
     override val confirmationMessage: Option[String] = None,
     override val children: List[HeyElement[_]] = Nil
 )(implicit val scoptBuilder: OParserBuilder[HeyCommandConfig])
-    extends HeyElement[T] {
+    extends HeyElement[T]:
 
   import scoptBuilder._
   override val scoptElement: String => OParser[T, HeyCommandConfig] =
     opt[T]
-}
 
 class HeyCommand(
     override val name: String,
@@ -201,7 +184,7 @@ class HeyCommand(
     override val confirmationMessage: Option[String] = None,
     override val children: List[HeyElement[_]] = Nil
 )(implicit val scoptBuilder: OParserBuilder[HeyCommandConfig])
-    extends HeyElement[Unit] {
+    extends HeyElement[Unit]:
 
   import scoptBuilder._
   override val scoptElement: String => OParser[Unit, HeyCommandConfig] =
@@ -209,7 +192,6 @@ class HeyCommand(
 
   override val scoptAction: (Unit, HeyCommandConfig) => HeyCommandConfig =
     (_, c) => commandAction(c)
-}
 
 class HeyArgument[T: Read](
     override val name: String,
@@ -224,9 +206,8 @@ class HeyArgument[T: Read](
     override val confirmationMessage: Option[String] = None,
     override val children: List[HeyElement[_]] = Nil
 )(implicit val scoptBuilder: OParserBuilder[HeyCommandConfig])
-    extends HeyElement[T] {
+    extends HeyElement[T]:
 
   import scoptBuilder._
   override val scoptElement: String => OParser[T, HeyCommandConfig] =
     arg[T]
-}

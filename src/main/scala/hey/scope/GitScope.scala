@@ -15,7 +15,7 @@ import scopt.{OParser, OParserBuilder}
 class GitScope(
     override implicit val scoptBuilder: OParserBuilder[HeyCommandConfig] =
       OParser.builder[HeyCommandConfig]
-) extends HeyCommandScope {
+) extends HeyCommandScope:
 
   override val scope: String = Git
 
@@ -30,11 +30,10 @@ class GitScope(
   )
 
   private def targetBranch(c: HeyCommandConfig) =
-    if (c.targetBranch.isEmpty) {
+    if c.targetBranch.isEmpty then
       "master"
-    } else {
+    else
       c.targetBranch
-    }
 
   private val SquashCommand = new HeyCommand(
     name = Squash,
@@ -97,4 +96,3 @@ class GitScope(
       CheckoutCommand
     )
 
-}

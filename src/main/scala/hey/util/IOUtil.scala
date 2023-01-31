@@ -9,7 +9,7 @@ package hey.util
 import java.io.Closeable
 import java.nio.file.{Files, Path, Paths}
 
-object IOUtil {
+object IOUtil:
 
   def homePath: String = System.getProperty("user.home")
 
@@ -20,23 +20,18 @@ object IOUtil {
   def readBytes(path: String): Option[Array[Byte]] =
     readBytes(Paths.get(path))
 
-  def readBytes(p: Path): Option[Array[Byte]] = {
-    if (Files.exists(p) && Files.isRegularFile(p)) {
+  def readBytes(p: Path): Option[Array[Byte]] =
+    if Files.exists(p) && Files.isRegularFile(p) then
       Some(Files.readAllBytes(p))
-    } else {
+    else
       None
-    }
-  }
 
   def readString(path: String): Option[String] =
     readBytes(path).map(new String(_))
 
-  def using[A, B <: Closeable](closeable: B)(f: B => A): A = {
-    try {
+  def using[A, B <: Closeable](closeable: B)(f: B => A): A =
+    try
       f(closeable)
-    } finally {
+    finally
       closeable.close()
-    }
-  }
 
-}
