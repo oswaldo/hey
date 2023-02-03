@@ -10,16 +10,17 @@ import hey.scope._
 import hey.scope.HeyCommandConfig
 import scopt.{OParser, OParserBuilder}
 
-object Main:
+object HeyCli:
+  val DefaultSupportedScopes: List[HeyCommandScope] =
+    List(new AnsibleScope, new DockerScope, new SbtScope, new GitScope)
+
+trait HeyCli(supportedScopes: List[HeyCommandScope] = DefaultSupportedScopes):
 
   implicit val scoptBuilder: OParserBuilder[HeyCommandConfig] =
     OParser.builder[HeyCommandConfig]
   import scoptBuilder._
 
-  private val supportedScopes: List[HeyCommandScope] =
-    List(new AnsibleScope, new DockerScope, new SbtScope, new GitScope)
-
-  private val parser =
+  private val parser: OParser[Unit, HeyCommandConfig] =
     OParser.sequence(
       programName("hey"), {
         val elements = List(
@@ -65,3 +66,5 @@ object Main:
       case None =>
       // bad arguments. nothing to do
     sys.exit()
+
+object HeyMain extends HeyCli()
