@@ -1,6 +1,6 @@
 # hey
 
-[![CircleCI](https://circleci.com/gh/oswaldo/hey.svg?style=svg)](https://circleci.com/gh/oswaldo/hey) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/8180a1acfeb444fc94964dfdf7ae18cd)](https://www.codacy.com/gh/oswaldo/hey/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=oswaldo/hey&amp;utm_campaign=Badge_Grade)
+[![CircleCI](https://circleci.com/gh/oswaldo/hey.svg?style=svg)](https://circleci.com/gh/oswaldo/hey) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/8180a1acfeb444fc94964dfdf7ae18cd)](https://www.codacy.com/gh/oswaldo/hey/dashboard?utm_source=github.com\&utm_medium=referral\&utm_content=oswaldo/hey\&utm_campaign=Badge_Grade)
 
 During development there are many commands and tools you need to keep track of, with completely different syntaxes
 between them and sometimes even the same tool has different syntaxes for different operations in the same scope.
@@ -41,20 +41,20 @@ currently being experimented with and notes about how I got there, so although t
 is no guarantee that following the steps would lead to any usable result. Still, I would recommend watching this repo as
 I expect to have something usable soon :)
 
- 1. Install Ansible: `sudo apt install ansible`
- 2. Add server groups to the `/etc/ansible/hosts` file:
+1.  Install Ansible: `sudo apt install ansible`
+2.  Add server groups to the `/etc/ansible/hosts` file:
 
-   ```yaml
-   webservers:
-     hosts:
-       someHostRange[1:12].some.domain
-   ```
+```yaml
+webservers:
+  hosts:
+    someHostRange[1:12].some.domain
+```
 
- 3. Install Scala native compilation OS packages (tested with Ubuntu): `sudo apt install clang libgc-dev libunwind-dev`
- 4. We could have an Ansible playbook in the future to install all dependencies but for now, besides the other packages,
-   manual build/install is required for this one: <https://github.com/google/re2/wiki/Install>
- 5. `sbt nativeLink`
- 6. You can use the natively compiled `hey` tool by calling `target/scala-2.11/hey-out`
+3.  Install Scala native compilation OS packages (tested with Ubuntu): `sudo apt install clang libgc-dev libunwind-dev`
+4.  We could have an Ansible playbook in the future to install all dependencies but for now, besides the other packages,
+    manual build/install is required for this one: <https://github.com/google/re2/wiki/Install>
+5.  `sbt nativeLink`
+6.  You can use the natively compiled `hey` tool by calling `target/scala-2.11/hey-out`
 
 In the future, sbt native packager will be used to produce installation packages so the tool can be used
 with `sudo apt install hey.deb; hey webservers status`
@@ -120,29 +120,29 @@ You can define default values for command options at the hocon file ~/.hey/hey.c
 
 ### Done
 
-  * Useful aliases for ansible, git, sbt and docker
-  * Architecture to easy the tool extension
-  * Config file for default option and argument values
-  * Usage examples
+*   Useful aliases for ansible, git, sbt and docker
+*   Architecture to easy the tool extension
+*   Config file for default option and argument values
+*   Usage examples
 
 ### Short term
 
-  * More aliases for supported commands
-  * "Summary verbosity"
-  * Architecture documentation
-  * Publish as dependency / allow private extensions
+*   More aliases for supported commands
+*   "Summary verbosity"
+*   Architecture documentation
+*   Publish as dependency / allow private extensions
 
 ### Middle term
 
-  * Installers
-  * Useful aliases for npm, maven, apt, zip, tar, ssh, cron and other common server and developer tools
-  * Modularization, so new commands and aliases are realized in external libraries
-  * Automation for configuring dependencies
+*   Installers
+*   Useful aliases for npm, maven, apt, zip, tar, ssh, cron and other common server and developer tools
+*   Modularization, so new commands and aliases are realized in external libraries
+*   Automation for configuring dependencies
 
 ### Long term
 
-  * Command dependency management and composition
-  * Assistant like behaviour (`hey bow rebuild then redeploy then check and loadTest tomorrow`)
+*   Command dependency management and composition
+*   Assistant like behaviour (`hey bow rebuild then redeploy then check and loadTest tomorrow`)
 
 ## License
 
