@@ -2,13 +2,18 @@
 
 [![CircleCI](https://circleci.com/gh/oswaldo/hey.svg?style=svg)](https://circleci.com/gh/oswaldo/hey) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/8180a1acfeb444fc94964dfdf7ae18cd)](https://www.codacy.com/gh/oswaldo/hey/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=oswaldo/hey&amp;utm_campaign=Badge_Grade)
 
-During development there are many commands and tools you need to keep track of, with completely different syntaxes between them and sometimes even the same tool has different syntaxes for different operations in the same scope.
+During development there are many commands and tools you need to keep track of, with completely different syntaxes
+between them and sometimes even the same tool has different syntaxes for different operations in the same scope.
 
-Tired of repeatedly looking at sometimes cryptic examples to remember how to do a simple operation while at the end of the day I don't even care about the tool I used to achieve it, I'm starting this pet project to experiment with Scala-native to interface with the different tools, giving them a more sane abstraction level.
+Tired of repeatedly looking at sometimes cryptic examples to remember how to do a simple operation while at the end of
+the day I don't even care about the tool I used to achieve it, I'm starting this pet project to experiment with
+Scala-native to interface with the different tools, giving them a more sane abstraction level.
 
-The first operations I intend to simplify are to request and change the status of a service running in multiple servers in a non-intrusive manner.
+The first operations I intend to simplify are to request and change the status of a service running in multiple servers
+in a non-intrusive manner.
 
-For that, I'll be forwarding calls to Ansible. For comparison, this is an ad-hoc way to get the status and restart some service in a server group using Ansible:
+For that, I'll be forwarding calls to Ansible. For comparison, this is an ad-hoc way to get the status and restart some
+service in a server group using Ansible:
 
 ```bash
 # for the status
@@ -18,7 +23,8 @@ ansible someServerGroup -a "systemctl status some-service-name.service"
 ansible someServerGroup -b -m service -a "name=some-service-name state=restarted"
 ```
 
-This is already better than a lot we find in the command line world, but still, hard to remember, full of arguments and not really uniform. What I want is something as easy to remember and uniform as this:
+This is already better than a lot we find in the command line world, but still, hard to remember, full of arguments and
+not really uniform. What I want is something as easy to remember and uniform as this:
 
 ```bash
 #for the status
@@ -30,10 +36,13 @@ hey restart -sg someServerGroup -sn some-service-name
 
 ## Status
 
-Currently, the code is in a very initial, prototype, not really working state. The text here is mostly a mix of stuff currently being experimented with and notes about how I got there, so although they worked for me at some point, there is no guarantee that following the steps would lead to any usable result. Still, I would recommend watching this repo as I expect to have something usable soon :)
+Currently, the code is in a very initial, prototype, not really working state. The text here is mostly a mix of stuff
+currently being experimented with and notes about how I got there, so although they worked for me at some point, there
+is no guarantee that following the steps would lead to any usable result. Still, I would recommend watching this repo as
+I expect to have something usable soon :)
 
-1. Install Ansible: `sudo apt install ansible`
-2. Add server groups to the `/etc/ansible/hosts` file:
+ 1. Install Ansible: `sudo apt install ansible`
+ 2. Add server groups to the `/etc/ansible/hosts` file:
 
    ```yaml
    webservers:
@@ -41,12 +50,14 @@ Currently, the code is in a very initial, prototype, not really working state. T
        someHostRange[1:12].some.domain
    ```
 
-3. Install Scala native compilation OS packages (tested with Ubuntu): `sudo apt install clang libgc-dev libunwind-dev`
-4. We could have an Ansible playbook in the future to install all dependencies but for now, besides the other packages, manual build/install is required for this one: <https://github.com/google/re2/wiki/Install>
-5. `sbt nativeLink`
-6. You can use the natively compiled `hey` tool by calling `target/scala-2.11/hey-out`
+ 3. Install Scala native compilation OS packages (tested with Ubuntu): `sudo apt install clang libgc-dev libunwind-dev`
+ 4. We could have an Ansible playbook in the future to install all dependencies but for now, besides the other packages,
+   manual build/install is required for this one: <https://github.com/google/re2/wiki/Install>
+ 5. `sbt nativeLink`
+ 6. You can use the natively compiled `hey` tool by calling `target/scala-2.11/hey-out`
 
-In the future, sbt native packager will be used to produce installation packages so the tool can be used with `sudo apt install hey.deb; hey webservers status`
+In the future, sbt native packager will be used to produce installation packages so the tool can be used
+with `sudo apt install hey.deb; hey webservers status`
 
 Meanwhile, you could do a link to the target and have it available with a proper name from anywhere. For instance:
 
@@ -109,29 +120,29 @@ You can define default values for command options at the hocon file ~/.hey/hey.c
 
 ### Done
 
-* Useful aliases for ansible, git, sbt and docker
-* Architecture to easy the tool extension
-* Config file for default option and argument values
-* Usage examples
+  * Useful aliases for ansible, git, sbt and docker
+  * Architecture to easy the tool extension
+  * Config file for default option and argument values
+  * Usage examples
 
 ### Short term
 
-* More aliases for supported commands
-* "Summary verbosity"
-* Architecture documentation
-* Publish as dependency / allow private extensions
+  * More aliases for supported commands
+  * "Summary verbosity"
+  * Architecture documentation
+  * Publish as dependency / allow private extensions
 
 ### Middle term
 
-* Installers
-* Useful aliases for npm, maven, apt, zip, tar, ssh, cron and other common server and developer tools
-* Modularization, so new commands and aliases are realized in external libraries
-* Automation for configuring dependencies
+  * Installers
+  * Useful aliases for npm, maven, apt, zip, tar, ssh, cron and other common server and developer tools
+  * Modularization, so new commands and aliases are realized in external libraries
+  * Automation for configuring dependencies
 
 ### Long term
 
-* Command dependency management and composition
-* Assistant like behaviour (`hey bow rebuild then redeploy then check and loadTest tomorrow`)
+  * Command dependency management and composition
+  * Assistant like behaviour (`hey bow rebuild then redeploy then check and loadTest tomorrow`)
 
 ## License
 
