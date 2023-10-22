@@ -8,7 +8,7 @@ nativeLinkStubs := true
 enablePlugins(ScalaNativePlugin)
 
 libraryDependencies += "com.github.scopt" %%% "scopt" % "4.1.0"
-libraryDependencies += "org.ekrich" %%% "sconfig" % "1.5.0"
+libraryDependencies += "org.ekrich" %%% "sconfig" % "1.5.1"
 libraryDependencies += "org.ekrich" %%% "sjavatime" % "1.1.9"
 
 git.useGitDescribe := true
